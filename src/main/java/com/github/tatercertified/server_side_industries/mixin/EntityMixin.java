@@ -37,7 +37,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
             } else {
                 if (current.isOf(SLOW_INCLINED_CONVEYOR)) {
                     if (slow_incline == 0) {
-                        Slope_Conveyor.onSteppedUpon(current, (Entity) (Object) this);
+                        Slope_Conveyor.onSteppedUpon(current, (Entity) (Object) this, world);
                         slow_incline = 40;
                     } else {
                         slow_incline--;
@@ -46,7 +46,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
 
                 else if (current.isOf(MEDIUM_INCLINED_CONVEYOR)) {
                     if (medium_incline == 0) {
-                        Slope_Conveyor.onSteppedUpon(current, (Entity) (Object) this);
+                        Slope_Conveyor.onSteppedUpon(current, (Entity) (Object) this, world);
                         medium_incline = 20;
                     } else {
                         medium_incline--;
@@ -55,7 +55,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
 
                 else if (current.isOf(FAST_INCLINED_CONVEYOR)) {
                     if (fast_incline == 0) {
-                        Slope_Conveyor.onSteppedUpon(current, (Entity) (Object) this);
+                        Slope_Conveyor.onSteppedUpon(current, (Entity) (Object) this, world);
                         fast_incline = 8;
                     } else {
                         fast_incline--;
@@ -63,7 +63,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
                 }
 
                 else if (current.isOf(INSANE_INCLINED_CONVEYOR)) {
-                    Slope_Conveyor.onSteppedUpon(current, (Entity) (Object) this);
+                    Slope_Conveyor.onSteppedUpon(current, (Entity) (Object) this, world);
                 }
             }
         } else if (down.isIn(CONVEYORS)) {
@@ -72,7 +72,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
             } else {
                 if (down.isOf(SLOW_INCLINED_CONVEYOR)) {
                     if (slow_incline == 0) {
-                        Slope_Conveyor.onSteppedUpon(down, (Entity) (Object) this);
+                        Slope_Conveyor.onSteppedUpon(down, (Entity) (Object) this, world);
                         slow_incline = 40;
                     } else {
                         slow_incline--;
@@ -81,7 +81,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
 
                 else if (down.isOf(MEDIUM_INCLINED_CONVEYOR)) {
                     if (medium_incline == 0) {
-                        Slope_Conveyor.onSteppedUpon(down, (Entity) (Object) this);
+                        Slope_Conveyor.onSteppedUpon(down, (Entity) (Object) this, world);
                         medium_incline = 20;
                     } else {
                         medium_incline--;
@@ -90,7 +90,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
 
                 else if (down.isOf(FAST_INCLINED_CONVEYOR)) {
                     if (fast_incline == 0) {
-                        Slope_Conveyor.onSteppedUpon(down, (Entity) (Object) this);
+                        Slope_Conveyor.onSteppedUpon(down, (Entity) (Object) this, world);
                         fast_incline = 8;
                     } else {
                         fast_incline--;
@@ -98,7 +98,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
                 }
 
                 else if (down.isOf(INSANE_INCLINED_CONVEYOR)) {
-                    Slope_Conveyor.onSteppedUpon(down, (Entity) (Object) this);
+                    Slope_Conveyor.onSteppedUpon(down, (Entity) (Object) this, world);
                 }
             }
         }

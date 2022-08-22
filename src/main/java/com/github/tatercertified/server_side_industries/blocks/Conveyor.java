@@ -47,15 +47,8 @@ public class Conveyor extends SlabBlock implements PolymerBlock {
 
     public static void conveyorMove(Entity entity, World world) {
         BlockPos.Mutable entity_pos = entity.getBlockPos().mutableCopy();
-            if (world.getBlockState(entity_pos.down()).isOf(Blocks.MAGENTA_GLAZED_TERRACOTTA)){
+            if (entity.isOnGround() && world.getBlockState(entity_pos.down()).isOf(Blocks.MAGENTA_GLAZED_TERRACOTTA)){
             Direction terracotta = world.getBlockState(entity_pos.down()).get(GlazedTerracottaBlock.FACING);
-            //directions
-            BlockPos blockPos = null;
-            if (terracotta == Direction.NORTH) blockPos = entity_pos.south();
-            if (terracotta == Direction.EAST) blockPos = entity_pos.west();
-            if (terracotta == Direction.SOUTH) blockPos = entity_pos.north();
-            if (terracotta == Direction.WEST) blockPos = entity_pos.east();
-
 
             //center alignment
             if (!entity.isPlayer() && terracotta.getAxis() == Direction.Axis.Z && (entity.getX() - entity_pos.getX() != 0.5)) {
@@ -66,7 +59,6 @@ public class Conveyor extends SlabBlock implements PolymerBlock {
                 entity.teleport(entity.getX(), entity.getY(), entity.getZ() - center);
             }
 
-            //if (world.getBlockState(blockPos).isOf(block)) entity.teleport(entity.getX(), entity.getBlockY()+1.3, entity.getZ());
             if (terracotta == Direction.NORTH) entity.setVelocity(0,0, conveyor_speed);
             if (terracotta == Direction.EAST) entity.setVelocity(conveyor_speed*-1,0,0);
             if (terracotta == Direction.SOUTH) entity.setVelocity(0,0,conveyor_speed*-1);
