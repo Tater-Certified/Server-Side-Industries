@@ -1,16 +1,17 @@
 package com.github.tatercertified.server_side_industries.blocks;
 
 import eu.pb4.polymer.api.block.PolymerBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.GlazedTerracottaBlock;
+import net.minecraft.block.*;
+import net.minecraft.block.enums.BlockHalf;
+import net.minecraft.block.enums.SlabType;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class Conveyor extends Block implements PolymerBlock {
+public class Conveyor extends SlabBlock implements PolymerBlock {
     public static double conveyor_speed;
     public Conveyor(Settings settings) {
         super(settings);
@@ -18,28 +19,36 @@ public class Conveyor extends Block implements PolymerBlock {
 
     @Override
     public Block getPolymerBlock(BlockState state) {
-        return Blocks.BLACK_CONCRETE_POWDER;
+        return Blocks.DEEPSLATE_TILE_SLAB;
     }
 
     @Override
-    public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        return this.getDefaultState().with(SlabBlock.TYPE, SlabType.BOTTOM);
+    }
+
+    @Override
+    public BlockState getPolymerBlockState(ServerPlayerEntity player, BlockState state) {
+        return Blocks.DEEPSLATE_TILE_SLAB.getDefaultState().with(SlabBlock.TYPE, SlabType.BOTTOM);
+    }
+
+    public static void onSteppedUpon(World world, BlockState state, Entity entity) {
         if (state == SSI_Blocks.SLOW_CONVEYOR.getDefaultState()) {
             conveyor_speed = 0.05;
         } else if((state == SSI_Blocks.MEDIUM_CONVEYOR.getDefaultState())) {
             conveyor_speed = 0.2;
         } else if ((state == SSI_Blocks.FAST_CONVEYOR.getDefaultState())) {
             conveyor_speed = 1;
-        } else {
+        } else if ((state == SSI_Blocks.INSANE_CONVEYOR.getDefaultState())){
             conveyor_speed = 2;
         }
-        conveyorMove(entity, state.getBlock(), world);
-        super.onSteppedOn(world, pos, state, entity);
+        conveyorMove(entity, world);
     }
 
-    public static void conveyorMove(Entity entity, Block block, World world) {
+    public static void conveyorMove(Entity entity, World world) {
         BlockPos.Mutable entity_pos = entity.getBlockPos().mutableCopy();
-            if (world.getBlockState(entity_pos.down(2)).isOf(Blocks.MAGENTA_GLAZED_TERRACOTTA)){
-            Direction terracotta = world.getBlockState(entity_pos.down(2)).get(GlazedTerracottaBlock.FACING);
+            if (world.getBlockState(entity_pos.down()).isOf(Blocks.MAGENTA_GLAZED_TERRACOTTA)){
+            Direction terracotta = world.getBlockState(entity_pos.down()).get(GlazedTerracottaBlock.FACING);
             //directions
             BlockPos blockPos = null;
             if (terracotta == Direction.NORTH) blockPos = entity_pos.south();
@@ -49,16 +58,16 @@ public class Conveyor extends Block implements PolymerBlock {
 
 
             //center alignment
-            if (!entity.isSneaking() && terracotta.getAxis() == Direction.Axis.Z && (entity.getX() - entity_pos.getX() != 0.5)) {
+            if (!entity.isPlayer() && terracotta.getAxis() == Direction.Axis.Z && (entity.getX() - entity_pos.getX() != 0.5)) {
                 double center = entity.getX() - entity_pos.getX()-0.5;
                 entity.teleport(entity.getX() - center, entity.getY(), entity.getZ());
-            } else if (!entity.isSneaking() && terracotta.getAxis() == Direction.Axis.X && (entity.getZ() - entity_pos.getZ() != 0.5)) {
+            } else if (!entity.isPlayer() && terracotta.getAxis() == Direction.Axis.X && (entity.getZ() - entity_pos.getZ() != 0.5)) {
                 double center = entity.getZ() - entity_pos.getZ()-0.5;
                 entity.teleport(entity.getX(), entity.getY(), entity.getZ() - center);
             }
 
-            if (world.getBlockState(blockPos).isOf(block)) entity.teleport(entity.getX(), entity.getBlockY()+1.3, entity.getZ());
-            if(terracotta == Direction.NORTH) entity.setVelocity(0,0, conveyor_speed);
+            //if (world.getBlockState(blockPos).isOf(block)) entity.teleport(entity.getX(), entity.getBlockY()+1.3, entity.getZ());
+            if (terracotta == Direction.NORTH) entity.setVelocity(0,0, conveyor_speed);
             if (terracotta == Direction.EAST) entity.setVelocity(conveyor_speed*-1,0,0);
             if (terracotta == Direction.SOUTH) entity.setVelocity(0,0,conveyor_speed*-1);
             if (terracotta == Direction.WEST) entity.setVelocity(conveyor_speed,0,0);
