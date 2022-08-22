@@ -8,7 +8,6 @@ import net.minecraft.block.StairsBlock;
 import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Direction;
 
 public class Slope_Conveyor extends StairsBlock implements PolymerBlock {
@@ -26,9 +25,9 @@ public class Slope_Conveyor extends StairsBlock implements PolymerBlock {
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getPlayerFacing()).with(HALF, BlockHalf.BOTTOM);
     }
-
+    
     @Override
-    public BlockState getPolymerBlockState(ServerPlayerEntity player, BlockState state) {
+    public BlockState getPolymerBlockState(BlockState state) {
         return Blocks.DEEPSLATE_TILE_STAIRS.getDefaultState().with(FACING, state.get(FACING)).with(HALF, BlockHalf.BOTTOM);
     }
 
