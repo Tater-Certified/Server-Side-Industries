@@ -2,7 +2,6 @@ package com.github.tatercertified.server_side_industries.blocks;
 
 import eu.pb4.polymer.api.block.PolymerBlock;
 import net.minecraft.block.*;
-import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.block.enums.SlabType;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemPlacementContext;
@@ -47,22 +46,36 @@ public class Conveyor extends SlabBlock implements PolymerBlock {
 
     public static void conveyorMove(Entity entity, World world) {
         BlockPos.Mutable entity_pos = entity.getBlockPos().mutableCopy();
-            if (entity.isOnGround() && world.getBlockState(entity_pos.down()).isOf(Blocks.MAGENTA_GLAZED_TERRACOTTA)){
+        if (entity.isOnGround() && world.getBlockState(entity_pos.down()).isOf(Blocks.MAGENTA_GLAZED_TERRACOTTA)) {
             Direction terracotta = world.getBlockState(entity_pos.down()).get(GlazedTerracottaBlock.FACING);
-
-            //center alignment
-            if (!entity.isPlayer() && terracotta.getAxis() == Direction.Axis.Z && (entity.getX() - entity_pos.getX() != 0.5)) {
-                double center = entity.getX() - entity_pos.getX()-0.5;
-                entity.teleport(entity.getX() - center, entity.getY(), entity.getZ());
-            } else if (!entity.isPlayer() && terracotta.getAxis() == Direction.Axis.X && (entity.getZ() - entity_pos.getZ() != 0.5)) {
-                double center = entity.getZ() - entity_pos.getZ()-0.5;
-                entity.teleport(entity.getX(), entity.getY(), entity.getZ() - center);
+            if (terracotta == Direction.NORTH) entity.setVelocity(0, 0, conveyor_speed);
+            else if (terracotta == Direction.EAST) entity.setVelocity(conveyor_speed * -1, 0, 0);
+            else if (terracotta == Direction.SOUTH) entity.setVelocity(0, 0, conveyor_speed * -1);
+            else if (terracotta == Direction.WEST) entity.setVelocity(conveyor_speed, 0, 0);
+        }
+        if (entity.isOnGround() && world.getBlockState(entity_pos.down(2)).isOf(Blocks.MAGENTA_GLAZED_TERRACOTTA)) {
+            Direction terracotta_angle = world.getBlockState(entity_pos.down(2)).get(GlazedTerracottaBlock.FACING);
+            if (terracotta_angle == Direction.NORTH) {
+                entity.setVelocity(entity.getVelocity().x, 0, conveyor_speed);
+            } else if (terracotta_angle == Direction.EAST) {
+                entity.setVelocity(conveyor_speed * -1, 0, entity.getVelocity().z);
+            } else if (terracotta_angle == Direction.SOUTH) {
+                entity.setVelocity(entity.getVelocity().x, 0, conveyor_speed * -1);
+            } else if (terracotta_angle == Direction.WEST) {
+                entity.setVelocity(conveyor_speed, 0, entity.getVelocity().z);
             }
-
-            if (terracotta == Direction.NORTH) entity.setVelocity(0,0, conveyor_speed);
-            if (terracotta == Direction.EAST) entity.setVelocity(conveyor_speed*-1,0,0);
-            if (terracotta == Direction.SOUTH) entity.setVelocity(0,0,conveyor_speed*-1);
-            if (terracotta == Direction.WEST) entity.setVelocity(conveyor_speed,0,0);
+        } else {
+            //center alignment
+            if (world.getBlockState(entity_pos.down()).isOf(Blocks.MAGENTA_GLAZED_TERRACOTTA)) {
+                Direction terracotta = world.getBlockState(entity_pos.down()).get(GlazedTerracottaBlock.FACING);
+                if (!entity.isLiving() && terracotta.getAxis() == Direction.Axis.Z && (entity.getX() - entity_pos.getX() != 0.5)) {
+                    double center = entity.getX() - entity_pos.getX() - 0.5;
+                    entity.teleport(entity.getX() - center, entity.getY(), entity.getZ());
+                } else if (!entity.isLiving() && terracotta.getAxis() == Direction.Axis.X && (entity.getZ() - entity_pos.getZ() != 0.5)) {
+                    double center = entity.getZ() - entity_pos.getZ() - 0.5;
+                    entity.teleport(entity.getX(), entity.getY(), entity.getZ() - center);
+                }
+            }
         }
         entity.velocityDirty = true;
         entity.velocityModified = true;
