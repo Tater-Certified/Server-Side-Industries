@@ -27,7 +27,7 @@ public class Conveyor extends SlabBlock implements PolymerBlock {
     }
 
     @Override
-    public BlockState getPolymerBlockState(ServerPlayerEntity player, BlockState state) {
+    public BlockState getPolymerBlockState(BlockState state) {
         return Blocks.DEEPSLATE_TILE_SLAB.getDefaultState().with(SlabBlock.TYPE, SlabType.BOTTOM);
     }
 
@@ -52,7 +52,7 @@ public class Conveyor extends SlabBlock implements PolymerBlock {
             else if (terracotta == Direction.EAST) entity.setVelocity(conveyor_speed * -1, 0, 0);
             else if (terracotta == Direction.SOUTH) entity.setVelocity(0, 0, conveyor_speed * -1);
             else if (terracotta == Direction.WEST) entity.setVelocity(conveyor_speed, 0, 0);
-        }
+        } else return;
         if (entity.isOnGround() && world.getBlockState(entity_pos.down(2)).isOf(Blocks.MAGENTA_GLAZED_TERRACOTTA)) {
             Direction terracotta_angle = world.getBlockState(entity_pos.down(2)).get(GlazedTerracottaBlock.FACING);
             if (terracotta_angle == Direction.NORTH) {

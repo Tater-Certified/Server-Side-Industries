@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+        "server-side-industries:slow_sloped_conveyor",
+        "server-side-industries:medium_sloped_conveyor",
+        "server-side-industries:fast_sloped_conveyor",
+        "server-side-industries:insane_sloped_conveyor"
+    ]
+}

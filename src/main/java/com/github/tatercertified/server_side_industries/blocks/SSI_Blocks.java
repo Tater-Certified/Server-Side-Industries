@@ -24,6 +24,7 @@ public class SSI_Blocks {
     public static Block INSANE_INCLINED_CONVEYOR = slopeconveyor();
 
     public static final TagKey<Block> CONVEYORS = TagKey.of(Registry.BLOCK_KEY, new Identifier(modid, "conveyors"));
+    public static final TagKey<Block> SLOPED_CONVEYORS = TagKey.of(Registry.BLOCK_KEY, new Identifier(modid, "sloped_conveyors"));
 
     private static Block conveyor() {
         return new Conveyor(FabricBlockSettings.of(Material.STONE).strength(1.5f, 6.0f));
