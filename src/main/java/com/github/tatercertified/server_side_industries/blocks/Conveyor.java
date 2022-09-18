@@ -4,8 +4,9 @@ import eu.pb4.polymer.api.block.PolymerBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.SlabType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -79,5 +80,10 @@ public class Conveyor extends SlabBlock implements PolymerBlock {
         }
         entity.velocityDirty = true;
         entity.velocityModified = true;
+    }
+
+    public static Direction ConveyorFacing(ItemUsageContext context) {
+        BlockPos.Mutable entity_pos = context.getBlockPos().mutableCopy();
+        return context.getWorld().getBlockState(entity_pos.down()).get(GlazedTerracottaBlock.FACING);
     }
 }
