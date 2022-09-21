@@ -17,8 +17,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -28,6 +26,7 @@ import static com.github.tatercertified.server_side_industries.blocks.Conveyor.D
 import static com.github.tatercertified.server_side_industries.blocks.SSI_Blocks.CONVEYORS;
 import static com.github.tatercertified.server_side_industries.blocks.SSI_Blocks.SLOPED_CONVEYORS;
 import static com.github.tatercertified.server_side_industries.blocks.Slope_Conveyor.REVERSED;
+import static net.minecraft.block.StairsBlock.FACING;
 
 public class Wrench extends ModelledPolymerItem {
     public Wrench(Settings settings, PolymerModelData customModelData) {
@@ -36,7 +35,7 @@ public class Wrench extends ModelledPolymerItem {
 
     public WorldHologram wrenchgram;
 
-    boolean running;;
+    boolean running;
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
@@ -70,6 +69,9 @@ public class Wrench extends ModelledPolymerItem {
                     BlockState current = player.getWorld().getBlockState(context.getBlockPos());
                     Direction now = current.get(DIRECTION).rotateYClockwise();
                     player.getWorld().setBlockState(context.getBlockPos(), current.with(DIRECTION, now));
+                    if (current.isIn(SLOPED_CONVEYORS)) {
+                        player.getWorld().setBlockState(context.getBlockPos(), current.with(FACING, now).with(DIRECTION, now));
+                    }
                     hologram.setText(1, Text.of("Direction: " + now));
                 }
             });
